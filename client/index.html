@@ -26,6 +26,132 @@
     </nav>
   </header>
 
+  <main class="app-main">
+    <section class="hero">
+      <div>
+        <h1>Predictive Travel &amp; Safety Dashboard</h1>
+        <p>
+          Get real-time travel safety insights for your current location and any
+          country you plan to visit. Powered by live advisory data and
+          geolocation.
+        </p>
+      </div>
+      <div class="hero-badges">
+        <div class="badge">IP Geolocation</div>
+        <div class="badge">Travel Advisory</div>
+        <div class="badge">MongoDB History</div>
+      </div>
+    </section>
+
+    <section class="controls-card">
+      <div class="controls-row">
+        <div class="field">
+          <label for="country-input">
+            Check another country (ISO code, e.g. US, LK, GB)
+          </label>
+          <input
+            id="country-input"
+            type="text"
+            maxlength="2"
+            placeholder="Auto from your IP..."
+          />
+        </div>
+        <button id="check-btn" class="btn primary">Check Safety</button>
+      </div>
+
+      <div class="meta-row">
+        <span id="last-updated">Last updated: –</span>
+        <button id="save-btn" class="btn secondary" disabled>
+          Save Advisory
+        </button>
+      </div>
+      <p class="hint">
+        Saved advisory data is stored per user using OAuth-based identity and persisted in MongoDB.
+      </p>
+    </section>
+
+    <section class="grid">
+      <article class="card main-card">
+        <header class="card-header">
+          <div>
+            <h2 id="country-name">Detecting your location...</h2>
+            <p id="country-subtitle">
+              Please wait a moment while we query live data.
+            </p>
+          </div>
+          <div class="score-pill" id="score-pill">
+            <span class="score-label">Safety Score</span>
+            <span class="score-value" id="score-value">–</span>
+          </div>
+        </header>
+
+        <div class="card-body">
+          <div class="columns">
+            <div class="col">
+              <h3>Advisory</h3>
+              <p id="advisory-text" class="advisory-text">
+                Real-time travel advisory text will appear here.
+              </p>
+            </div>
+            <div class="col col-small">
+              <h3>At a glance</h3>
+              <ul class="at-a-glance">
+                <li>
+                  <span class="label">Risk Level</span>
+                  <span id="risk-level" class="chip">–</span>
+                </li>
+                <li>
+                  <span class="label">Country Code</span>
+                  <span id="country-code" class="value">–</span>
+                </li>
+                <li>
+                  <span class="label">Your IP Location</span>
+                  <span id="location-meta" class="value">–</span>
+                </li>
+              </ul>
+              <div class="flag-wrapper">
+                <img id="flag-image" alt="Country flag" class="flag hidden" />
+              </div>
+            </div>
+          </div>
+        </div>
+      </article>
+
+      <article class="card history-card">
+        <header class="card-header">
+          <div>
+            <h2>Saved Advisory History</h2>
+            <p>Records stored securely in MongoDB.</p>
+          </div>
+          <button id="refresh-history-btn" class="btn ghost small">
+            Refresh
+          </button>
+        </header>
+        <div class="card-body history-body">
+          <table class="history-table">
+            <thead>
+              <tr>
+                <th>Country</th>
+                <th>Code</th>
+                <th>Score</th>
+                <th>Risk</th>
+                <th>Saved At</th>
+              </tr>
+            </thead>
+            <tbody id="history-body">
+              <tr>
+                <td colspan="5" class="empty-state">
+                  No records yet. Sign in, fetch a country, and click
+                  <strong>Save Advisory</strong>.
+                </td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </article>
+    </section>
+  </main>
+
   
 </body>
 </html>
