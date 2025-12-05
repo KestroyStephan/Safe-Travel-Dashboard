@@ -49,3 +49,10 @@ function getRiskFromScore(score) {
   if (score >= 2.5) return { label: "Moderate Risk", className: "moderate" }; // Yellow/Orange
   return { label: "Low Risk", className: "safe" }; // Green
 }
+
+function getFlagUrl(iso2) {
+  if (!iso2) return null;
+  const codeLower = iso2.toLowerCase();
+  // Uses FlagCDN for nice SVG flags
+  return `https://flagcdn.com/w80/${codeLower}.png`;
+}
