@@ -139,3 +139,15 @@ function renderHistory(records) {
     historyBodyEl.appendChild(row);
   });
 }
+
+//  API calls to backend proxies -----------------------
+
+async function fetchIpLocation() {
+  const res = await fetch(`${API_BASE_URL}/api/ip-location`);
+  if (!res.ok) {
+    console.warn("IP Location failed, defaulting to manual input mode.");
+    // Return dummy data so app doesn't crash
+    return { country: "United States", countryCode: "US", city: "Unknown" };
+  }
+  return res.json();
+}
