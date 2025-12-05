@@ -142,3 +142,38 @@ body {
 .hidden {
   display: none !important;
 }
+
+.app-main {
+  flex: 1;
+  width: 100%;
+  max-width: 1120px;
+  margin: 0 auto;
+  padding: 1.25rem 1.25rem 2rem;
+}
+
+.hero {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-between;
+  gap: 1.2rem;
+  margin-bottom: 1.4rem;
+}
+
+.hero h1 {
+  margin: 0 0 0.4rem;
+  font-size: clamp(1.7rem, 3vw, 2.1rem);
+}
+
+.hero p {
+  margin: 0;
+  max-width: 520px;
+  color: var(--text-muted);
+  font-size: 0.96rem;
+}
+
+.hero-badges {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 0.4rem;
+}
