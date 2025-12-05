@@ -56,3 +56,55 @@ function getFlagUrl(iso2) {
   // Uses FlagCDN for nice SVG flags
   return `https://flagcdn.com/w80/${codeLower}.png`;
 }
+
+function renderDashboard(payload) {
+  const { ipInfo, advisory, meta } = payload;
+
+  const countryName = advisory.countryName || ipInfo?.country;
+  const code = advisory.countryCode || ipInfo?.countryCode;
+
+  countryNameEl.textContent = countryName || "Unknown country";
+  countrySubtitleEl.textContent = `Real-time advisory for ${countryName || "this location"}`;
+
+  const score = advisory.score;
+  scoreValueEl.textContent = typeof score === "number" ? score.toFixed(2) : "–";
+
+  // Dynamic Coloring for Score
+  const risk = getRiskFromScore(score);
+  riskLevelEl.textContent = risk.label;
+  
+  // Clear old classes and add new one
+  riskLevelEl.className = `chip ${risk.className}`; 
+  
+  // Also color the big score number for better visual impact
+  scoreValueEl.className = "display-4 fw-bold"; // Reset base classes
+  if (risk.className === "danger") scoreValueEl.classList.add("text-danger");
+  else if (risk.className === "moderate") scoreValueEl.classList.add("text-warning");
+  else if (risk.className === "safe") scoreValueEl.classList.add("text-success");
+
+  advisoryTextEl.textContent = advisory.message || "No specific advisory found.";
+
+  countryCodeEl.textContent = code || "–";
+
+  if (ipInfo && ipInfo.city) {
+    locationMetaEl.textContent = `${ipInfo.city}, ${ipInfo.country}`;
+  } else {
+    locationMetaEl.textContent = "–";
+  }
+
+  const flagUrl = getFlagUrl(code);
+  if (flagUrl) {
+    flagImageEl.src = flagUrl;
+    flagImageEl.classList.remove("hidden");
+  } else {
+    flagImageEl.classList.add("hidden");
+  }
+
+  if (meta?.fetchedAt) {
+    lastUpdatedEl.textContent = `Last updated: ${formatDateTime(meta.fetchedAt)}`;
+  } else if (advisory.updated) {
+     lastUpdatedEl.textContent = `Last updated: ${formatDateTime(advisory.updated)}`;
+  }
+
+  saveBtn.disabled = false;
+}
