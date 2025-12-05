@@ -108,3 +108,34 @@ function renderDashboard(payload) {
 
   saveBtn.disabled = false;
 }
+
+function renderHistory(records) {
+  historyBodyEl.innerHTML = "";
+
+  if (!records || records.length === 0) {
+    const row = document.createElement("tr");
+    row.innerHTML = '<td colspan="5" class="empty-state">No records yet. Sign in, fetch a country, and click <strong>Save Advisory</strong>.</td>';
+    historyBodyEl.appendChild(row);
+    return;
+  }
+
+  records.forEach((rec) => {
+    const row = document.createElement("tr");
+
+    // Handle legacy data structure or new structure
+    const score = typeof rec.advisory?.score === "number" ? rec.advisory.score : (rec.advisoryScore || 0);
+    const risk = getRiskFromScore(score);
+    const cName = rec.advisory?.countryName || rec.countryName || "-";
+    const cCode = rec.advisory?.countryCode || rec.countryCode || "-";
+
+    row.innerHTML = `
+      <td>${cName}</td>
+      <td><span class="badge bg-secondary">${cCode}</span></td>
+      <td class="fw-bold ${risk.className === 'danger' ? 'text-danger' : (risk.className === 'moderate' ? 'text-warning' : 'text-success')}">${typeof score === "number" ? score.toFixed(2) : "–"}</td>
+      <td><span class="chip ${risk.className}">${risk.label}</span></td>
+      <td>${formatDateTime(rec.createdAt)}</td>
+    `;
+
+    historyBodyEl.appendChild(row);
+  });
+}
