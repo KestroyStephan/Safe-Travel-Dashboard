@@ -1,0 +1,17 @@
+:root {
+  --bg: #050816;
+  --bg-elevated: #0f172a;
+  --bg-elevated-softer: #111827;
+  --border-soft: #1f2937;
+  --accent: #3b82f6;
+  --accent-soft: rgba(59, 130, 246, 0.2);
+  --danger: #f97373;
+  --safe: #22c55e;
+  --warning: #facc15;
+  --text-main: #e5e7eb;
+  --text-muted: #9ca3af;
+  --chip-bg: #020617;
+  --shadow-soft: 0 18px 45px rgba(15, 23, 42, 0.8);
+  --radius-lg: 18px;
+  --radius-pill: 999px;
+}
