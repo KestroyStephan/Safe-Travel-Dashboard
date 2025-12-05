@@ -38,3 +38,14 @@ function formatDateTime(isoString) {
   const d = new Date(isoString);
   return d.toLocaleString();
 }
+
+// Convert Score (0-5) to Risk Label & Color Class
+function getRiskFromScore(score) {
+  if (typeof score !== "number" || Number.isNaN(score)) {
+    return { label: "Unknown", className: "secondary" };
+  }
+  // Logic matches Canadian Risk Levels
+  if (score >= 4.0) return { label: "High Risk", className: "danger" }; // Red
+  if (score >= 2.5) return { label: "Moderate Risk", className: "moderate" }; // Yellow/Orange
+  return { label: "Low Risk", className: "safe" }; // Green
+}
