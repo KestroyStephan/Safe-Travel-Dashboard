@@ -162,3 +162,42 @@ async function fetchTravelAdvisory(countryCode) {
   }
   return res.json(); 
 }
+
+async function updateForCurrentLocation() {
+  try {
+    setLoadingState(true, "Detecting your location...");
+    const ipData = await fetchIpLocation();
+    
+    // If IP detection works, automatically fetch advisory for that country
+    if (ipData && ipData.countryCode) {
+        setLoadingState(true, `Fetching advisory for ${ipData.country}...`);
+        const advisory = await fetchTravelAdvisory(ipData.countryCode);
+
+        const payload = {
+          ipInfo: {
+            query: ipData.query,
+            country: ipData.country,
+            countryCode: ipData.countryCode,
+            region: ipData.regionName,
+            city: ipData.city,
+            lat: ipData.lat,
+            lon: ipData.lon
+          },
+          advisory,
+          meta: {
+            fetchedAt: new Date().toISOString(),
+            source: "auto"
+          }
+        };
+
+        currentCombinedPayload = payload;
+        renderDashboard(payload);
+    } else {
+        countrySubtitleEl.textContent = "Could not detect location. Please search manually.";
+    }
+  } catch (err) {
+    console.error(err);
+    countrySubtitleEl.textContent = "Error fetching live data.";
+    advisoryTextEl.textContent = "Please check your internet connection or try searching manually.";
+  }
+}
