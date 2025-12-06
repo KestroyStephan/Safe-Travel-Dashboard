@@ -152,3 +152,13 @@ async function fetchIpLocation() {
   return res.json();
 }
 
+async function fetchTravelAdvisory(countryCode) {
+  const code = (countryCode || "").toUpperCase();
+  const res = await fetch(`${API_BASE_URL}/api/travel-advisory?countryCode=${code}`);
+  
+  if (!res.ok) {
+    const text = await res.text();
+    throw new Error(`Failed to fetch travel advisory for ${code}: ${res.status} ${text}`);
+  }
+  return res.json(); 
+}
