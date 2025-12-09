@@ -329,3 +329,16 @@ function readAuthFromUrl() {
     userNameEl.textContent = "";
   }
 }
+
+function startGoogleLogin() {
+  window.location.href = `${API_BASE_URL}/auth/google`;
+}
+
+function logout() {
+  window.APP_CONFIG.OAUTH_ACCESS_TOKEN = null;
+  window.APP_CONFIG.USER_NAME = null;
+  loginBtn.classList.remove("hidden");
+  logoutBtn.classList.add("hidden");
+  userNameEl.textContent = "";
+  renderHistory([]);
+}
