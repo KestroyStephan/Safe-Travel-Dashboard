@@ -201,3 +201,30 @@ async function updateForCurrentLocation() {
     advisoryTextEl.textContent = "Please check your internet connection or try searching manually.";
   }
 }
+
+async function updateForCountry(countryCode) {
+  if (!countryCode) {
+    alert("Please enter a 2-letter country code (e.g. US, LK, GB).");
+    return;
+  }
+  try {
+    setLoadingState(true, `Fetching advisory for ${countryCode.toUpperCase()}...`);
+    const advisory = await fetchTravelAdvisory(countryCode.toUpperCase());
+
+    const payload = {
+      ipInfo: currentCombinedPayload?.ipInfo || null,
+      advisory,
+      meta: {
+        fetchedAt: new Date().toISOString(),
+        source: "manual"
+      }
+    };
+
+    currentCombinedPayload = payload;
+    renderDashboard(payload);
+  } catch (err) {
+    console.error(err);
+    alert(`Error: ${err.message}`);
+    countrySubtitleEl.textContent = "Search failed.";
+  }
+}
