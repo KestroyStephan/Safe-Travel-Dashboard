@@ -274,3 +274,30 @@ async function saveCurrentAdvisory() {
     saveBtn.disabled = false;
   }
 }
+
+async function loadHistory() {
+  if (!window.APP_CONFIG.OAUTH_ACCESS_TOKEN) {
+    // Don't try to load history if not logged in
+    renderHistory([]); 
+    return;
+  }
+
+  try {
+    const res = await fetch(`${API_BASE_URL}/api/records`, {
+      headers: {
+        Authorization: `Bearer ${window.APP_CONFIG.OAUTH_ACCESS_TOKEN}`,
+        "x-api-key": CLIENT_API_KEY
+      }
+    });
+
+    if (!res.ok) {
+      console.warn("Failed to load history.");
+      return;
+    }
+
+    const records = await res.json();
+    renderHistory(records);
+  } catch (err) {
+    console.error("Error loading history", err);
+  }
+}
