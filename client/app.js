@@ -228,3 +228,49 @@ async function updateForCountry(countryCode) {
     countrySubtitleEl.textContent = "Search failed.";
   }
 }
+
+// ---------------- Backend JSON endpoints ----------------
+
+async function saveCurrentAdvisory() {
+  if (!currentCombinedPayload) {
+    alert("Nothing to save yet. Fetch an advisory first.");
+    return;
+  }
+
+  if (!window.APP_CONFIG.OAUTH_ACCESS_TOKEN) {
+    alert("You need to sign in with Google before saving.");
+    return;
+  }
+
+  try {
+    saveBtn.disabled = true;
+    saveBtn.textContent = "Saving...";
+
+    const res = await fetch(`${API_BASE_URL}/api/advisories`, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${window.APP_CONFIG.OAUTH_ACCESS_TOKEN}`,
+        "x-api-key": CLIENT_API_KEY
+      },
+      body: JSON.stringify(currentCombinedPayload)
+    });
+
+    if (!res.ok) {
+      throw new Error(`Server error (${res.status})`);
+    }
+
+    await res.json();
+    // alert("Advisory saved to MongoDB."); // Optional: Remove alert for smoother UX
+    saveBtn.textContent = "Saved!";
+    setTimeout(() => { saveBtn.textContent = "Save Advisory"; }, 2000);
+    
+    await loadHistory(); // Refresh table immediately
+  } catch (err) {
+    console.error(err);
+    alert(`Failed to save advisory: ${err.message}`);
+    saveBtn.textContent = "Save Advisory";
+  } finally {
+    saveBtn.disabled = false;
+  }
+}
