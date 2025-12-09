@@ -301,3 +301,31 @@ async function loadHistory() {
     console.error("Error loading history", err);
   }
 }
+
+// ---------------- OAuth2 helpers ----------------
+
+function readAuthFromUrl() {
+  const params = new URLSearchParams(window.location.search);
+  const token = params.get("access_token");
+  const name = params.get("name");
+
+  if (token) {
+    window.APP_CONFIG.OAUTH_ACCESS_TOKEN = token;
+    window.APP_CONFIG.USER_NAME = name || "Google user";
+
+    loginBtn.classList.add("hidden");
+    logoutBtn.classList.remove("hidden");
+    userNameEl.textContent = `Signed in as ${window.APP_CONFIG.USER_NAME}`;
+
+    // Clean URL bar
+    const cleanUrl = window.location.origin + window.location.pathname;
+    window.history.replaceState({}, "", cleanUrl);
+  } else {
+    // Ensure we are logged out
+    window.APP_CONFIG.OAUTH_ACCESS_TOKEN = null;
+    window.APP_CONFIG.USER_NAME = null;
+    loginBtn.classList.remove("hidden");
+    logoutBtn.classList.add("hidden");
+    userNameEl.textContent = "";
+  }
+}
